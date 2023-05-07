@@ -6,7 +6,9 @@
 include("direction.jl")
 include("vertex.jl")
 
-struct ExtLeg{T,T_mom} <: AbstractEdge{T}
+abstract type FeynmanEdge{T} <: AbstractEdge{T} end
+
+struct ExtLeg{T,T_mom} <: FeynmanEdge{T}
     int::InternalVertex{<:T}
     ext::ExternalVertex{<:T}
     mom::T_mom
@@ -28,7 +30,7 @@ struct ExtLeg{T,T_mom} <: AbstractEdge{T}
     end # function ExtLeg
 end # struct ExtLeg
 
-struct Propagator{T_vertex,T_mom,T_mass,T_delta} <: AbstractEdge{T_vertex}
+struct Propagator{T_vertex,T_mom,T_mass,T_delta} <: FeynmanEdge{T_vertex}
     src::InternalVertex{<:T_vertex}
     dst::InternalVertex{<:T_vertex}
     mom::T_mom
@@ -55,10 +57,10 @@ end # struct Propagator
 # I/O
 function show(io::IO, ::MIME"text/plain", ext_leg::ExtLeg)
     direction_str = string(ext_leg.direction)
-    int_str = string(ext_leg.int)
-    ext_str = string(ext_leg.ext)
-    src_str = (string ∘ src)(ext_leg)
-    dst_str = (string ∘ dst)(ext_leg)
+    int_str = get_id_str(ext_leg.int)
+    ext_str = get_id_str(ext_leg.ext)
+    src_str = (get_id_str ∘ src)(ext_leg)
+    dst_str = (get_id_str ∘ dst)(ext_leg)
     return print(io,
         """
         External leg ($int_str => $ext_str):
@@ -69,8 +71,8 @@ function show(io::IO, ::MIME"text/plain", ext_leg::ExtLeg)
 end # function show
 
 function show(io::IO, ::MIME"text/plain", propagator::Propagator)
-    src_str = (string ∘ src)(propagator)
-    dst_str = (string ∘ dst)(propagator)
+    src_str = (get_id_str ∘ src)(propagator)
+    dst_str = (get_id_str ∘ dst)(propagator)
     return print(io, 
         """
         Propagator:

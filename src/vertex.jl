@@ -25,7 +25,10 @@ struct EndVertex{T} <: ExternalVertex{T}
 end
 
 # I/O
-show(io::IO, mime::MIME"text/plain", vertex::AbstractVertex) =
-    show(io, mime, vertex.id)
-string(vertex::AbstractVertex) = string(vertex.id)
+show(io::IO, ::MIME"text/plain", vertex::Vertex) =
+    print(io, "Vertex: $(vertex.id)")
+show(io::IO, ::MIME"text/plain", vertex::EndVertex) =
+    print(io, "End vertex: $(vertex.id)")
 
+# util
+get_id_str(vertex::AbstractVertex) = string(vertex.id)
