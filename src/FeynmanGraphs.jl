@@ -5,17 +5,19 @@
 
 module FeynmanGraphs
 
-import Base: convert, show, string
-
 using Graphs
 
-export Vertex, EndVertex
-export MultiEdgeVertex, SelfLoopVertex
-export ExtLeg, Propagator
-export FeynmanGraph
+import Base: eltype, Pair, Tuple, ==, zero
+import Graphs: src, dst
+import Graphs: edges, edgetype, has_edge, has_vertex, inneighbors, ne, nv, outneighbors, vertices, is_directed
 
-export construct_Feynman_graph
+include("Direction.jl")
+include("Vertex.jl")
 
-include("graph.jl")
+include("Edge.jl")
+include("ExternalLeg.jl")
+include("Propagator.jl")
+
+include("Graph.jl")
 
 end # module FeynmanGraphs
